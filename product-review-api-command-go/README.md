@@ -1,0 +1,77 @@
+# Product Review & Rating API - Go Usecase Version
+
+Go implementation of the product review demo API, modeled after the Java command-pattern project but using `usecase` terminology.
+
+## Tech Stack
+
+- Go 1.24+
+- Gorilla Mux
+- In-memory repository
+- Standard library HTTP server
+- Testify
+- Shared `Execute(ctx, input any)` usecase contract
+- Internal `appctx.Response` envelope for success/error handling
+
+## Architecture
+
+```text
+Handler
+  -> ProductReviewUsecases
+      -> Usecase
+          -> Repository
+          -> Client
+          -> Shared ProductReviewService helpers
+```
+
+Each usecase implements the same `Execute(ctx, input any)` method and returns a shared `appctx.Response`. The HTTP handler keeps the public JSON shape of the API stable by writing success data directly and mapping errors to `{ "message": "..." }`.
+
+## Run
+
+```bash
+go run ./cmd
+```
+
+Default URL:
+
+```text
+http://localhost:7082
+```
+
+Optional configuration:
+
+```bash
+APP_PORT=7082 DB_SIMULATED_LATENCY_MS=200 go run ./cmd
+```
+
+## Endpoints
+
+```http
+POST /api/v1/products/{productId}/reviews
+GET  /api/v1/products/{productId}/review-summary
+GET  /api/v1/sellers/{sellerId}/review-analytics
+GET  /api/v1/products/{productId}/reviews
+GET  /api/v1/customers/{customerId}/reviews
+GET  /api/v1/reviews/recent?limit=10
+GET  /api/v1/products/{productId}/review-analytics/daily?month=5&year=2026
+```
+
+## Simulated Database Latency
+
+The repository waits before each operation to mimic blocking database time:
+
+```bash
+DB_SIMULATED_LATENCY_MS=200
+```
+
+## Load Test
+
+```bash
+k6 run load-test/review-summary-1000-rps.js
+```
+
+Phases:
+
+```text
+30s warm-up at 100 req/s
+30s measured load at 1000 req/s
+```

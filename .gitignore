@@ -1,0 +1,47 @@
+# Ignore everything at the repository root by default.
+/*
+
+# Keep this file and only the projects intended for version control.
+!/.gitignore
+!/product-review-api/
+!/product-review-api/**
+!/product-review-api-command/
+!/product-review-api-command/**
+!/product-review-api-command-go/
+!/product-review-api-command-go/**
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/editor files
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Logs and runtime output
+*.log
+logs/
+
+# Java/Maven build output
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Go build/test output
+bin/
+dist/
+*.exe
+*.test
+*.out
+coverage/
+coverage.*
