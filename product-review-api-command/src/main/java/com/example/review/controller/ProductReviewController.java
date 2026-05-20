@@ -1,7 +1,8 @@
 package com.example.review.controller;
 
 import com.example.review.command.*;
-import com.example.review.command.request.*;
+import com.example.review.command.productreview.*;
+import com.example.review.dto.command.request.*;
 import com.example.review.dto.request.CreateReviewRequest;
 import com.example.review.dto.response.*;
 import jakarta.validation.Valid;

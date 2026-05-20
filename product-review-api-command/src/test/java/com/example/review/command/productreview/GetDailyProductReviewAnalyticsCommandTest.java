@@ -1,6 +1,6 @@
-package com.example.review.command;
+package com.example.review.command.productreview;
 
-import com.example.review.command.request.GetDailyProductReviewAnalyticsCommandRequest;
+import com.example.review.dto.command.request.GetDailyProductReviewAnalyticsCommandRequest;
 import com.example.review.config.DatabaseLatencySimulator;
 import com.example.review.dto.response.DailyProductReviewAnalyticsResponse;
 import com.example.review.repository.ProductReviewRepository;

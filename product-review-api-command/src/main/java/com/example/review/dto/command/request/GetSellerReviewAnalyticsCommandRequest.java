@@ -1,4 +1,4 @@
-package com.example.review.command.request;
+package com.example.review.dto.command.request;
 
 public record GetSellerReviewAnalyticsCommandRequest(String sellerId) {
 

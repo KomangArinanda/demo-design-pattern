@@ -1,7 +1,7 @@
-package com.example.review.command;
+package com.example.review.command.productreview;
 
 import com.example.review.client.ProductClient;
-import com.example.review.command.request.GetSellerReviewAnalyticsCommandRequest;
+import com.example.review.dto.command.request.GetSellerReviewAnalyticsCommandRequest;
 import com.example.review.config.DatabaseLatencySimulator;
 import com.example.review.dto.response.SellerProductsResponse;
 import com.example.review.dto.response.SellerReviewAnalyticsResponse;
