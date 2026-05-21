@@ -2,32 +2,32 @@ package product_review
 
 import "example/product-review-api-command-go/internal/dto/request"
 
-type SaveUsecaseRequest struct {
+type SaveRequest struct {
 	ProductID string
 	Request   request.CreateReviewRequest
 }
 
-type GetSummaryUsecaseRequest struct {
+type GetSummaryRequest struct {
 	ProductID string
 }
 
-type GetSellerReviewAnalyticsUsecaseRequest struct {
+type GetSellerReviewAnalyticsRequest struct {
 	SellerID string
 }
 
-type GetListUsecaseRequest struct {
+type GetListRequest struct {
 	ProductID string
 }
 
-type GetListCustomerReviewsUsecaseRequest struct {
+type GetListCustomerReviewsRequest struct {
 	CustomerID string
 }
 
-type GetListRecentReviewsUsecaseRequest struct {
+type GetListRecentReviewsRequest struct {
 	Limit int
 }
 
-type GetDailyAnalyticsUsecaseRequest struct {
+type GetDailyAnalyticsRequest struct {
 	ProductID string
 	Month     int
 	Year      int

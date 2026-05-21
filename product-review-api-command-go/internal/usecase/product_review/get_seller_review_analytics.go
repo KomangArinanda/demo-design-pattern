@@ -11,22 +11,22 @@ import (
 	"sort"
 )
 
-type getSellerReviewAnalyticsUsecase struct {
+type getSellerReviewAnalytics struct {
 	repository    repo.ProductReviewRepo
 	productClient client.ProductClient
 	service       *service.ProductReviewService
 }
 
-func NewGetSellerReviewAnalyticsUsecase(repository repo.ProductReviewRepo, productClient client.ProductClient, sharedService *service.ProductReviewService) *getSellerReviewAnalyticsUsecase {
-	return &getSellerReviewAnalyticsUsecase{
+func NewGetSellerReviewAnalytics(repository repo.ProductReviewRepo, productClient client.ProductClient, sharedService *service.ProductReviewService) *getSellerReviewAnalytics {
+	return &getSellerReviewAnalytics{
 		repository:    repository,
 		productClient: productClient,
 		service:       sharedService,
 	}
 }
 
-func (u *getSellerReviewAnalyticsUsecase) Execute(_ context.Context, input any) appctx.Response {
-	request, ok := common.MustInput[GetSellerReviewAnalyticsUsecaseRequest](input)
+func (u *getSellerReviewAnalytics) Execute(_ context.Context, input any) appctx.Response {
+	request, ok := common.MustInput[GetSellerReviewAnalyticsRequest](input)
 	if !ok {
 		return common.BadRequest("Invalid request")
 	}

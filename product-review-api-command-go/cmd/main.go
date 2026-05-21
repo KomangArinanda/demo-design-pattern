@@ -27,7 +27,7 @@ func main() {
 	orderClient := client.NewOrderClient()
 	productClient := client.NewProductClient()
 	sharedService := service.NewProductReviewService()
-	usecases := product_review.NewProductReviewUsecases(repository, orderClient, productClient, sharedService)
+	usecases := product_review.NewProductReview(repository, orderClient, productClient, sharedService)
 	httpHandler := handler.NewHandler(usecases)
 	router := httpRouter.InitializeRouter(httpHandler)
 

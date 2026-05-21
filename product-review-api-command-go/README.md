@@ -1,6 +1,6 @@
-# Product Review & Rating API - Go Usecase Version
+# Product Review & Rating API - Go Executor Version
 
-Go implementation of the product review demo API, modeled after the Java command-pattern project but using `usecase` terminology.
+Go implementation of the product review demo API, modeled after the Java command-pattern project with use cases grouped under `internal/usecase`.
 
 ## Tech Stack
 
@@ -9,21 +9,21 @@ Go implementation of the product review demo API, modeled after the Java command
 - In-memory repository
 - Standard library HTTP server
 - Testify
-- Shared `Execute(ctx, input any)` usecase contract
+- Shared `Execute(ctx, input any)` executor contract
 - Internal `appctx.Response` envelope for success/error handling
 
 ## Architecture
 
 ```text
 Handler
-  -> ProductReviewUsecases
-      -> Usecase
+  -> ProductReview
+      -> Executor
           -> Repository
           -> Client
           -> Shared ProductReviewService helpers
 ```
 
-Each usecase implements the same `Execute(ctx, input any)` method and returns a shared `appctx.Response`. The HTTP handler keeps the public JSON shape of the API stable by writing success data directly and mapping errors to `{ "message": "..." }`.
+Each executor implements the same `Execute(ctx, input any)` method and returns a shared `appctx.Response`. The HTTP handler keeps the public JSON shape of the API stable by writing success data directly and mapping errors to `{ "message": "..." }`.
 
 ## Run
 

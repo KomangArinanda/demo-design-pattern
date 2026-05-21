@@ -9,20 +9,20 @@ import (
 	"example/product-review-api-command-go/internal/usecase/common"
 )
 
-type getSummaryUsecase struct {
+type getSummary struct {
 	repository repo.ProductReviewRepo
 	service    *service.ProductReviewService
 }
 
-func NewGetSummaryUsecase(repository repo.ProductReviewRepo, sharedService *service.ProductReviewService) *getSummaryUsecase {
-	return &getSummaryUsecase{
+func NewGetSummary(repository repo.ProductReviewRepo, sharedService *service.ProductReviewService) *getSummary {
+	return &getSummary{
 		repository: repository,
 		service:    sharedService,
 	}
 }
 
-func (u *getSummaryUsecase) Execute(_ context.Context, input any) appctx.Response {
-	request, ok := common.MustInput[GetSummaryUsecaseRequest](input)
+func (u *getSummary) Execute(_ context.Context, input any) appctx.Response {
+	request, ok := common.MustInput[GetSummaryRequest](input)
 	if !ok {
 		return common.BadRequest("Invalid request")
 	}

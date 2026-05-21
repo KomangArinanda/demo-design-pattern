@@ -12,20 +12,20 @@ import (
 	"time"
 )
 
-type getDailyAnalyticsUsecase struct {
+type getDailyAnalytics struct {
 	repository repo.ProductReviewRepo
 	service    *service.ProductReviewService
 }
 
-func NewGetDailyAnalyticsUsecase(repository repo.ProductReviewRepo, sharedService *service.ProductReviewService) *getDailyAnalyticsUsecase {
-	return &getDailyAnalyticsUsecase{
+func NewGetDailyAnalytics(repository repo.ProductReviewRepo, sharedService *service.ProductReviewService) *getDailyAnalytics {
+	return &getDailyAnalytics{
 		repository: repository,
 		service:    sharedService,
 	}
 }
 
-func (u *getDailyAnalyticsUsecase) Execute(_ context.Context, input any) appctx.Response {
-	request, ok := common.MustInput[GetDailyAnalyticsUsecaseRequest](input)
+func (u *getDailyAnalytics) Execute(_ context.Context, input any) appctx.Response {
+	request, ok := common.MustInput[GetDailyAnalyticsRequest](input)
 	if !ok {
 		return common.BadRequest("Invalid request")
 	}

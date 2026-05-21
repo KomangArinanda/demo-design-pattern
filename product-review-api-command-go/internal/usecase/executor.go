@@ -6,6 +6,6 @@ import (
 	"example/product-review-api-command-go/internal/shared/appctx"
 )
 
-type Usecase interface {
+type Executor interface {
 	Execute(ctx context.Context, input any) appctx.Response
 }

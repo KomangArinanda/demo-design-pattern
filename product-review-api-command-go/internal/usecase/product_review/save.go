@@ -10,20 +10,20 @@ import (
 	"example/product-review-api-command-go/internal/usecase/common"
 )
 
-type saveUsecase struct {
+type save struct {
 	repository  repo.ProductReviewRepo
 	orderClient client.OrderClient
 }
 
-func NewSaveUsecase(repository repo.ProductReviewRepo, orderClient client.OrderClient) *saveUsecase {
-	return &saveUsecase{
+func NewSave(repository repo.ProductReviewRepo, orderClient client.OrderClient) *save {
+	return &save{
 		repository:  repository,
 		orderClient: orderClient,
 	}
 }
 
-func (u *saveUsecase) Execute(_ context.Context, input any) appctx.Response {
-	request, ok := common.MustInput[SaveUsecaseRequest](input)
+func (u *save) Execute(_ context.Context, input any) appctx.Response {
+	request, ok := common.MustInput[SaveRequest](input)
 	if !ok {
 		return common.BadRequest("Invalid request")
 	}

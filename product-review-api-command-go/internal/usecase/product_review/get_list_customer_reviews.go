@@ -8,20 +8,20 @@ import (
 	"example/product-review-api-command-go/internal/usecase/common"
 )
 
-type getListUsecase struct {
+type getListCustomerReviews struct {
 	repository repo.ProductReviewRepo
 	service    *service.ProductReviewService
 }
 
-func NewGetListUsecase(repository repo.ProductReviewRepo, sharedService *service.ProductReviewService) *getListUsecase {
-	return &getListUsecase{repository: repository, service: sharedService}
+func NewGetListCustomerReviews(repository repo.ProductReviewRepo, sharedService *service.ProductReviewService) *getListCustomerReviews {
+	return &getListCustomerReviews{repository: repository, service: sharedService}
 }
 
-func (u *getListUsecase) Execute(_ context.Context, input any) appctx.Response {
-	request, ok := common.MustInput[GetListUsecaseRequest](input)
+func (u *getListCustomerReviews) Execute(_ context.Context, input any) appctx.Response {
+	request, ok := common.MustInput[GetListCustomerReviewsRequest](input)
 	if !ok {
 		return common.BadRequest("Invalid request")
 	}
-	reviews := u.repository.FindByProductIDOrderByCreatedAtDesc(request.ProductID)
+	reviews := u.repository.FindByCustomerID(request.CustomerID)
 	return appctx.OK(u.service.MapReviewDetailResponses(reviews))
 }

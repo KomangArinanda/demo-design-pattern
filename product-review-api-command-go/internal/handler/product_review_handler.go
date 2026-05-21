@@ -22,10 +22,10 @@ type ProductReviewHandler interface {
 }
 
 type productReviewHandler struct {
-	usecases *product_review.ProductReviewUsecases
+	usecases *product_review.ProductReview
 }
 
-func NewProductReviewHandler(usecases *product_review.ProductReviewUsecases) ProductReviewHandler {
+func NewProductReviewHandler(usecases *product_review.ProductReview) ProductReviewHandler {
 	return &productReviewHandler{usecases: usecases}
 }
 
@@ -35,7 +35,7 @@ func (h *productReviewHandler) CreateReview(w http.ResponseWriter, r *http.Reque
 		writeError(w, http.StatusBadRequest, "Invalid request body")
 		return
 	}
-	requestModel := product_review.SaveUsecaseRequest{
+	requestModel := product_review.SaveRequest{
 		ProductID: mux.Vars(r)["productId"],
 		Request:   body,
 	}
@@ -43,25 +43,25 @@ func (h *productReviewHandler) CreateReview(w http.ResponseWriter, r *http.Reque
 }
 
 func (h *productReviewHandler) GetProductReviewSummary(w http.ResponseWriter, r *http.Request) {
-	writeAppResponse(w, h.usecases.GetSummary.Execute(r.Context(), product_review.GetSummaryUsecaseRequest{
+	writeAppResponse(w, h.usecases.GetSummary.Execute(r.Context(), product_review.GetSummaryRequest{
 		ProductID: mux.Vars(r)["productId"],
 	}))
 }
 
 func (h *productReviewHandler) GetSellerReviewAnalytics(w http.ResponseWriter, r *http.Request) {
-	writeAppResponse(w, h.usecases.GetSellerReviewAnalytics.Execute(r.Context(), product_review.GetSellerReviewAnalyticsUsecaseRequest{
+	writeAppResponse(w, h.usecases.GetSellerReviewAnalytics.Execute(r.Context(), product_review.GetSellerReviewAnalyticsRequest{
 		SellerID: mux.Vars(r)["sellerId"],
 	}))
 }
 
 func (h *productReviewHandler) GetProductReviews(w http.ResponseWriter, r *http.Request) {
-	writeAppResponse(w, h.usecases.GetList.Execute(r.Context(), product_review.GetListUsecaseRequest{
+	writeAppResponse(w, h.usecases.GetList.Execute(r.Context(), product_review.GetListRequest{
 		ProductID: mux.Vars(r)["productId"],
 	}))
 }
 
 func (h *productReviewHandler) GetCustomerReviews(w http.ResponseWriter, r *http.Request) {
-	writeAppResponse(w, h.usecases.GetListCustomerReviews.Execute(r.Context(), product_review.GetListCustomerReviewsUsecaseRequest{
+	writeAppResponse(w, h.usecases.GetListCustomerReviews.Execute(r.Context(), product_review.GetListCustomerReviewsRequest{
 		CustomerID: mux.Vars(r)["customerId"],
 	}))
 }
@@ -71,7 +71,7 @@ func (h *productReviewHandler) GetRecentReviews(w http.ResponseWriter, r *http.R
 	if limit == 0 {
 		limit = 10
 	}
-	writeAppResponse(w, h.usecases.GetListRecentReviews.Execute(r.Context(), product_review.GetListRecentReviewsUsecaseRequest{
+	writeAppResponse(w, h.usecases.GetListRecentReviews.Execute(r.Context(), product_review.GetListRecentReviewsRequest{
 		Limit: limit,
 	}))
 }
@@ -87,7 +87,7 @@ func (h *productReviewHandler) GetDailyProductReviewAnalytics(w http.ResponseWri
 		writeError(w, http.StatusBadRequest, "Year is required")
 		return
 	}
-	requestModel := product_review.GetDailyAnalyticsUsecaseRequest{
+	requestModel := product_review.GetDailyAnalyticsRequest{
 		ProductID: mux.Vars(r)["productId"],
 		Month:     month,
 		Year:      year,
