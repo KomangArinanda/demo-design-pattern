@@ -3,6 +3,7 @@
 
 # Keep this file and only the projects intended for version control.
 !/.gitignore
+!/notes for command-pattern-sharing.md
 !/product-review-api/
 !/product-review-api/**
 !/product-review-api-command/
