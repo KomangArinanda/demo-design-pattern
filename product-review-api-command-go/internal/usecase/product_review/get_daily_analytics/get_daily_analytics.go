@@ -1,16 +1,35 @@
-package product_review
+package get_daily_analytics
 
 import (
 	"context"
+	"errors"
 	"example/product-review-api-command-go/internal/dto/response"
 	"example/product-review-api-command-go/internal/model"
 	"example/product-review-api-command-go/internal/repo"
 	"example/product-review-api-command-go/internal/service"
 	"example/product-review-api-command-go/internal/shared/appctx"
 	"example/product-review-api-command-go/internal/usecase/common"
+	"net/http"
 	"sort"
 	"time"
 )
+
+type GetDailyAnalyticsRequest struct {
+	ProductID string
+	Month     int
+	Year      int
+}
+
+var ErrInvalidMonth = errors.New("month must be between 1 and 12")
+
+func errorResponse(err error) appctx.Response {
+	switch err {
+	case ErrInvalidMonth:
+		return appctx.Error(http.StatusBadRequest, err.Error())
+	default:
+		return appctx.Error(http.StatusBadRequest, err.Error())
+	}
+}
 
 type getDailyAnalytics struct {
 	repository repo.ProductReviewRepo

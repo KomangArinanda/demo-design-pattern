@@ -52,8 +52,8 @@ k6 run load-test/review-summary-1000-rps.js
 The script runs in two phases:
 
 ```text
-30s warm-up at 100 req/s
-30s measured load at 1000 req/s
+10s warm-up at 100 req/s
+10s measured load at 1000 req/s
 ```
 
 Optional overrides:

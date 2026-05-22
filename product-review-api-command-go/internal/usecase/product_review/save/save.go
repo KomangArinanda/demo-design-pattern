@@ -1,14 +1,21 @@
-package product_review
+package save
 
 import (
 	"context"
 	"example/product-review-api-command-go/internal/client"
+	"example/product-review-api-command-go/internal/dto/request"
 	"example/product-review-api-command-go/internal/dto/response"
 	"example/product-review-api-command-go/internal/model"
 	"example/product-review-api-command-go/internal/repo"
 	"example/product-review-api-command-go/internal/shared/appctx"
 	"example/product-review-api-command-go/internal/usecase/common"
+	"net/http"
 )
+
+type Request struct {
+	ProductID string
+	Request   request.CreateReviewRequest
+}
 
 type save struct {
 	repository  repo.ProductReviewRepo
@@ -23,12 +30,12 @@ func NewSave(repository repo.ProductReviewRepo, orderClient client.OrderClient) 
 }
 
 func (u *save) Execute(_ context.Context, input any) appctx.Response {
-	request, ok := common.MustInput[SaveRequest](input)
+	request, ok := common.MustInput[Request](input)
 	if !ok {
 		return common.BadRequest("Invalid request")
 	}
 	if request.Request.Rating < 1 || request.Request.Rating > 5 {
-		return errorResponse(ErrInvalidRating)
+		return appctx.Error(http.StatusBadRequest, "rating must be between 1 and 5")
 	}
 	orderValidation := u.orderClient.ValidateOrder(
 		request.Request.CustomerID,
@@ -36,14 +43,14 @@ func (u *save) Execute(_ context.Context, input any) appctx.Response {
 		request.ProductID,
 	)
 	if !orderValidation.Valid || orderValidation.OrderStatus != "COMPLETED" {
-		return errorResponse(ErrInvalidOrder)
+		appctx.Error(http.StatusUnprocessableEntity, "Customer did not purchase this product")
 	}
 	if u.repository.ExistsByProductCustomerOrder(
 		request.ProductID,
 		request.Request.CustomerID,
 		request.Request.OrderID,
 	) {
-		return errorResponse(ErrDuplicateReview)
+		return appctx.Error(http.StatusConflict, "duplicate review")
 	}
 
 	saved := u.repository.Save(model.ProductReview{

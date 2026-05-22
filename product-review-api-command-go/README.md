@@ -4,7 +4,7 @@ Go implementation of the product review demo API, modeled after the Java command
 
 ## Tech Stack
 
-- Go 1.24+
+- Go 1.26.1
 - Gorilla Mux
 - In-memory repository
 - Standard library HTTP server
@@ -43,6 +43,20 @@ Optional configuration:
 APP_PORT=7082 DB_SIMULATED_LATENCY_MS=200 go run ./cmd
 ```
 
+## Test
+
+Run all tests:
+
+```bash
+go test ./...
+```
+
+If your local Go environment has multiple installed versions, force this project to use Go 1.26.1:
+
+```bash
+GOTOOLCHAIN=local GOROOT=/Users/komangarinanda/.goenv/versions/1.26.1 /Users/komangarinanda/.goenv/versions/1.26.1/bin/go test ./...
+```
+
 ## Endpoints
 
 ```http
@@ -72,6 +86,6 @@ k6 run load-test/review-summary-1000-rps.js
 Phases:
 
 ```text
-30s warm-up at 100 req/s
-30s measured load at 1000 req/s
+10s warm-up at 100 req/s
+10s measured load at 1000 req/s
 ```

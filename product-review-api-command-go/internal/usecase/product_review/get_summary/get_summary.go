@@ -1,4 +1,4 @@
-package product_review
+package get_summary
 
 import (
 	"context"
@@ -8,6 +8,10 @@ import (
 	"example/product-review-api-command-go/internal/shared/appctx"
 	"example/product-review-api-command-go/internal/usecase/common"
 )
+
+type GetSummaryRequest struct {
+	ProductID string
+}
 
 type getSummary struct {
 	repository repo.ProductReviewRepo

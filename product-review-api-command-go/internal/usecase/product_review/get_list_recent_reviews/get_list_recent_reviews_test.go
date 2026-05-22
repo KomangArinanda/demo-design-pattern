@@ -1,11 +1,37 @@
-package usecase_test
+package get_list_recent_reviews
 
 import (
+	"context"
 	"example/product-review-api-command-go/internal/dto/response"
 	"example/product-review-api-command-go/internal/model"
+	"example/product-review-api-command-go/internal/service"
+	"net/http"
 	"sort"
+	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
+
+func Test_Execute_Success(t *testing.T) {
+	repository := newFakeRepo([]model.ProductReview{
+		newReview(1, "PROD-001", "CUST-001", "ORD-001", 5, time.Date(2026, 5, 1, 9, 0, 0, 0, time.Local)),
+		newReview(2, "PROD-002", "CUST-002", "ORD-002", 4, time.Date(2026, 5, 3, 9, 0, 0, 0, time.Local)),
+		newReview(3, "PROD-003", "CUST-003", "ORD-003", 3, time.Date(2026, 5, 2, 9, 0, 0, 0, time.Local)),
+	})
+	usecase := NewGetListRecentReviews(repository, service.NewProductReviewService())
+
+	result := usecase.Execute(context.Background(), GetListRecentReviewsRequest{Limit: 2})
+
+	require.Equal(t, http.StatusOK, result.Code)
+	reviews, ok := result.Data.([]response.ReviewDetailResponse)
+	require.True(t, ok)
+	require.Len(t, reviews, 2)
+	assert.Equal(t, int64(2), reviews[0].ReviewID)
+}
+
+// -- test doubles --
 
 type fakeRepo struct {
 	reviews []model.ProductReview
@@ -17,53 +43,31 @@ func newFakeRepo(reviews []model.ProductReview) *fakeRepo {
 }
 
 func (r *fakeRepo) ExistsByProductCustomerOrder(productID string, customerID string, orderID string) bool {
-	for _, review := range r.reviews {
-		if review.ProductID == productID && review.CustomerID == customerID && review.OrderID == orderID {
-			return true
-		}
-	}
 	return false
 }
 
 func (r *fakeRepo) Save(review model.ProductReview) model.ProductReview {
-	review.ID = r.nextID
-	review.CreatedAt = time.Date(2026, 5, 15, 10, 0, 0, 0, time.Local)
-	review.UpdatedAt = review.CreatedAt
-	r.nextID++
-	r.reviews = append(r.reviews, review)
-	return review
+	return model.ProductReview{}
 }
 
 func (r *fakeRepo) FindByProductID(productID string) []model.ProductReview {
-	return filterReviews(r.reviews, func(review model.ProductReview) bool { return review.ProductID == productID })
+	return nil
 }
 
 func (r *fakeRepo) FindTop5ByProductID(productID string) []model.ProductReview {
-	reviews := r.FindByProductIDOrderByCreatedAtDesc(productID)
-	if len(reviews) > 5 {
-		return reviews[:5]
-	}
-	return reviews
+	return nil
 }
 
 func (r *fakeRepo) FindByProductIDs(productIDs []string) []model.ProductReview {
-	lookup := map[string]bool{}
-	for _, productID := range productIDs {
-		lookup[productID] = true
-	}
-	return filterReviews(r.reviews, func(review model.ProductReview) bool { return lookup[review.ProductID] })
+	return nil
 }
 
 func (r *fakeRepo) FindByCustomerID(customerID string) []model.ProductReview {
-	return filterReviews(r.reviews, func(review model.ProductReview) bool { return review.CustomerID == customerID })
+	return nil
 }
 
 func (r *fakeRepo) FindByProductIDOrderByCreatedAtDesc(productID string) []model.ProductReview {
-	reviews := r.FindByProductID(productID)
-	sort.Slice(reviews, func(i, j int) bool {
-		return reviews[i].CreatedAt.After(reviews[j].CreatedAt)
-	})
-	return reviews
+	return nil
 }
 
 func (r *fakeRepo) FindRecent(limit int) []model.ProductReview {
@@ -78,32 +82,14 @@ func (r *fakeRepo) FindRecent(limit int) []model.ProductReview {
 }
 
 func (r *fakeRepo) FindByProductIDAndCreatedAtBetween(productID string, start time.Time, end time.Time) []model.ProductReview {
-	return filterReviews(r.reviews, func(review model.ProductReview) bool {
-		return review.ProductID == productID && !review.CreatedAt.Before(start) && review.CreatedAt.Before(end)
-	})
+	return nil
 }
 
 func (r *fakeRepo) FindByProductIDAndCreatedAtBetweenDesc(productID string, start time.Time, end time.Time) []model.ProductReview {
-	return r.FindByProductIDAndCreatedAtBetween(productID, start, end)
+	return nil
 }
 
-type fakeOrderClient struct {
-	response response.OrderValidationResponse
-}
-
-func (c fakeOrderClient) ValidateOrder(customerID string, orderID string, productID string) response.OrderValidationResponse {
-	return c.response
-}
-
-type fakeProductClient struct {
-	response response.SellerProductsResponse
-}
-
-func (c fakeProductClient) GetProductIDsBySellerID(sellerID string) response.SellerProductsResponse {
-	return c.response
-}
-
-func review(id int64, productID string, customerID string, orderID string, rating int, createdAt time.Time) model.ProductReview {
+func newReview(id int64, productID string, customerID string, orderID string, rating int, createdAt time.Time) model.ProductReview {
 	return model.ProductReview{
 		ID:         id,
 		ProductID:  productID,

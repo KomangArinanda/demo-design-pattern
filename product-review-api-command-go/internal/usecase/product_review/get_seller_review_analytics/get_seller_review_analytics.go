@@ -1,4 +1,4 @@
-package product_review
+package get_seller_review_analytics
 
 import (
 	"context"
@@ -10,6 +10,10 @@ import (
 	"example/product-review-api-command-go/internal/usecase/common"
 	"sort"
 )
+
+type GetSellerReviewAnalyticsRequest struct {
+	SellerID string
+}
 
 type getSellerReviewAnalytics struct {
 	repository    repo.ProductReviewRepo

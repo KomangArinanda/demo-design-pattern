@@ -1,4 +1,4 @@
-package product_review
+package get_list_recent_reviews
 
 import (
 	"context"
@@ -7,6 +7,10 @@ import (
 	"example/product-review-api-command-go/internal/shared/appctx"
 	"example/product-review-api-command-go/internal/usecase/common"
 )
+
+type GetListRecentReviewsRequest struct {
+	Limit int
+}
 
 type getListRecentReviews struct {
 	repository repo.ProductReviewRepo

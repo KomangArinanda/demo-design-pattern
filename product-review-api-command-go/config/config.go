@@ -14,7 +14,7 @@ type Config struct {
 func Load() Config {
 	return Config{
 		Port:                     envOrDefault("APP_PORT", "7082"),
-		DatabaseSimulatedLatency: time.Duration(envIntOrDefault("DB_SIMULATED_LATENCY_MS", 200)) * time.Millisecond,
+		DatabaseSimulatedLatency: time.Duration(envIntOrDefault("DB_SIMULATED_LATENCY_MS", 50)) * time.Millisecond,
 	}
 }
 

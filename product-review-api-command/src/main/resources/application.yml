@@ -30,4 +30,4 @@ logging:
 
 app:
   database:
-    simulated-latency-ms: 200
+    simulated-latency-ms: 50
